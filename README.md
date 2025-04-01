@@ -1,54 +1,81 @@
-# React + TypeScript + Vite
+# 🚀 Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Une application moderne de gestion de tâches, construite avec React et TypeScript.
 
-Currently, two official plugins are available:
+## ✨ Fonctionnalités
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ **Gestion de tâches** - Ajout, modification et suppression de tâches
+- 🔍 **Recherche** - Filtrage des tâches par mot-clé
+- 🏷️ **Filtres par statut** - Organisation des tâches selon leur statut
+- 📊 **Suivi de progression** - Visualisation de l'avancement global
+- 📱 **Interface responsive** - Design moderne adapté à tous les appareils
+- 🌙 **Mode sombre** - Interface élégante avec un thème sombre
 
-## Expanding the ESLint configuration
+## 🛠️ Technologies utilisées
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Frontend
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **React** - Bibliothèque UI
+- **TypeScript** - Typage statique
+- **Vite** - Build tool
+- **TailwindCSS** - Framework CSS
+- **Radix UI** - Composants accessibles
+- **Lucide React** - Icônes modernes
+
+### Tests
+
+- **Jest** - Tests unitaires
+- **Playwright** - Tests end-to-end
+- **React Testing Library** - Tests de composants
+
+## 🚦 Démarrage rapide
+
+### Prérequis
+
+- Node.js (v18+)
+- npm ou yarn
+
+### Installation et lancement
+
+```sh
+# Installer les dépendances
+npm install
+# ou
+yarn install
+
+# Démarrer l'application en mode développement
+npm run dev
+# ou
+yarn dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+L'application sera accessible à l'adresse [http://localhost:5173](http://localhost:5173).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧪 Tests
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```sh
+# Exécuter les tests unitaires
+npm run test:unit
+# ou
+yarn test:unit
+
+# Exécuter les tests end-to-end
+npm run test:e2e
+# ou
+yarn test:e2e
 ```
+
+## 🏗️ Build
+
+```sh
+# Compiler l'application pour la production
+npm run build
+# ou
+yarn build
+```
+
+Les fichiers compilés seront disponibles dans le dossier `dist`.
+
+## 📝 Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](./LICENSE) pour plus de détails.
