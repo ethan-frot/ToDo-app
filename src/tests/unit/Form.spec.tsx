@@ -22,12 +22,10 @@ describe("Form Component", () => {
     render(<Form open={true} setOpen={mockSetOpen} />);
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText(/que devez-vous faire/i)
-    ).toBeInTheDocument();
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
-    expect(screen.getByText(/annuler/i)).toBeInTheDocument();
-    expect(screen.getByText(/ajouter/i)).toBeInTheDocument();
+    expect(screen.getByTestId("new-todo-input")).toBeInTheDocument();
+    expect(screen.getByTestId("todo-status-select")).toBeInTheDocument();
+    expect(screen.getByTestId("cancel-button")).toBeInTheDocument();
+    expect(screen.getByTestId("submit-new-todo-button")).toBeInTheDocument();
   });
 
   test("devrait rendre le formulaire de modification avec les données existantes", () => {
@@ -59,10 +57,7 @@ describe("Form Component", () => {
     const user = userEvent.setup();
 
     render(<Form open={true} setOpen={mockSetOpen} />);
-    await user.type(
-      screen.getByPlaceholderText(/que devez-vous faire/i),
-      "Nouvelle tâche"
-    );
+    await user.type(screen.getByTestId("new-todo-input"), "Nouvelle tâche");
 
     await user.click(screen.getByTestId("submit-new-todo-button"));
 
@@ -74,7 +69,7 @@ describe("Form Component", () => {
 
     render(<Form open={true} setOpen={mockSetOpen} />);
 
-    await user.click(screen.getByText(/annuler/i));
+    await user.click(screen.getByTestId("cancel-button"));
 
     expect(mockSetOpen).toHaveBeenCalledWith(false);
   });

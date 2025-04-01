@@ -69,11 +69,22 @@ jest.mock("@/components/TodoList/TodoFilters", () => {
     currentFilter: string | null;
     setFilter: (filter: string | null) => void;
   }) => (
-    <div data-testid="filters">
-      <button onClick={() => setFilter(null)}>Toutes</button>
-      <button onClick={() => setFilter(Status.TODO)}>À faire</button>
-      <button onClick={() => setFilter(Status.IN_PROGRESS)}>En cours</button>
-      <button onClick={() => setFilter(Status.DONE)}>Terminées</button>
+    <div data-testid="todo-filters">
+      <button data-testid="filter-all" onClick={() => setFilter(null)}>
+        Toutes
+      </button>
+      <button data-testid="filter-TODO" onClick={() => setFilter(Status.TODO)}>
+        À faire
+      </button>
+      <button
+        data-testid="filter-IN_PROGRESS"
+        onClick={() => setFilter(Status.IN_PROGRESS)}
+      >
+        En cours
+      </button>
+      <button data-testid="filter-DONE" onClick={() => setFilter(Status.DONE)}>
+        Terminées
+      </button>
     </div>
   );
   return MockTodoFilters;
@@ -88,7 +99,7 @@ jest.mock("@/components/TodoList/TodoProgress", () => {
       (t: Todo) => t.status !== Status.ARCHIVED
     ).length;
     return (
-      <div data-testid="todo-progress">
+      <div data-testid="todo-progress-container">
         {completed}/{total}
       </div>
     );
@@ -110,14 +121,15 @@ describe("TodoList Component", () => {
     const user = userEvent.setup();
     render(<TodoList list={mockTodoList} />);
 
-    await user.click(screen.getByRole("button", { name: /à faire/i }));
+    // Simuler un clic sur le bouton "À faire"
+    await user.click(screen.getByTestId("filter-TODO"));
   });
 
   test("devrait filtrer les tâches avec la recherche", async () => {
     const user = userEvent.setup();
     render(<TodoList list={mockTodoList} />);
 
-    const searchInput = screen.getByPlaceholderText(/rechercher/i);
+    const searchInput = screen.getByTestId("search-todo-input");
     await user.type(searchInput, "Tâche 1");
   });
 
@@ -133,6 +145,6 @@ describe("TodoList Component", () => {
   test("devrait afficher la progression des tâches", () => {
     render(<TodoList list={mockTodoList} />);
 
-    expect(screen.getByTestId("todo-progress")).toBeInTheDocument();
+    expect(screen.getByTestId("todo-progress-container")).toBeInTheDocument();
   });
 });

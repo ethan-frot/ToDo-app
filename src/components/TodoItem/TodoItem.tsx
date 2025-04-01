@@ -54,6 +54,7 @@ const TodoItem = ({
               : "border-gray-600 hover:border-teal-500"
           }`}
           title={isDone ? "Marquer comme à faire" : "Marquer comme terminée"}
+          data-testid="todo-checkbox"
         >
           {isDone && <CheckCircle className="w-5 h-5 text-green-500" />}
         </button>
@@ -62,12 +63,18 @@ const TodoItem = ({
           <CompletedTodoLabel label={label} />
         ) : (
           <div className="flex flex-col min-w-0">
-            <span className="font-medium truncate text-white">{label}</span>
+            <span
+              className="font-medium truncate text-white"
+              data-testid="todo-label"
+            >
+              {label}
+            </span>
             <div className="mt-1 inline-flex">
               <span
                 className={`px-2 py-0.5 rounded-sm text-xs font-medium ${getStatusColor(
                   status
                 )}`}
+                data-testid="todo-status"
               >
                 {status}
               </span>

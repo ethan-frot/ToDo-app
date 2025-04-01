@@ -18,12 +18,13 @@ interface TodoFiltersProps {
 
 const TodoFilters = ({ currentFilter, setFilter }: TodoFiltersProps) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2" data-testid="todo-filters">
       {filterOptions.map((option) => (
         <Button
           key={option.label}
           size="sm"
           variant="ghost"
+          data-testid={`filter-${option.value || "all"}`}
           className={
             currentFilter === option.value
               ? "bg-teal-500/20 text-teal-300 hover:bg-teal-500/30 border border-teal-500/30"

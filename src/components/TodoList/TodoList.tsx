@@ -61,6 +61,7 @@ const TodoList = ({ list }: { list: Todo[] }) => {
             className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-teal-400 focus:ring-1 focus:ring-teal-400 focus:outline-none text-white placeholder-gray-400"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            data-testid="search-todo-input"
           />
         </div>
 
@@ -80,7 +81,7 @@ const TodoList = ({ list }: { list: Todo[] }) => {
 
       <Form open={open} setOpen={setOpen} todo={selectedTodo} />
 
-      <div className="space-y-2 mt-2">
+      <div className="space-y-2 mt-2" data-testid="todo-list-container">
         {filteredTodos.length > 0 ? (
           filteredTodos.map((item) => (
             <TodoItem
@@ -91,7 +92,10 @@ const TodoList = ({ list }: { list: Todo[] }) => {
             />
           ))
         ) : (
-          <div className="py-16 text-center text-gray-400 bg-white/5 rounded-xl border border-white/10">
+          <div
+            className="py-16 text-center text-gray-400 bg-white/5 rounded-xl border border-white/10"
+            data-testid="empty-todo-message"
+          >
             {todos.length === 0
               ? 'Aucune tâche pour le moment. Cliquez sur "Ajouter" pour commencer.'
               : "Aucune tâche ne correspond à vos critères de recherche."}

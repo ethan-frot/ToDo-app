@@ -101,6 +101,7 @@ const Form = ({
                 <select
                   value={value}
                   onChange={onChange}
+                  data-testid="todo-status-select"
                   className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 focus:border-teal-400 focus:ring-1 focus:ring-teal-400 focus:outline-none text-white"
                 >
                   {Object.entries(Status).map(([key, value]) => (
@@ -126,6 +127,7 @@ const Form = ({
               }}
               variant="outline"
               className="border-white/10 hover:bg-white/5 text-gray-300 rounded-xl"
+              data-testid="cancel-button"
             >
               <X className="w-4 h-4 mr-2" />
               Annuler
