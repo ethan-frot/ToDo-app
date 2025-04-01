@@ -1,9 +1,9 @@
 import { Status, Todo } from "@/types/todo.type";
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { useTodoListContext } from "@/context/hook.ts";
+import { useTodoListContext } from "@/context/hook";
 import { Check, X } from "lucide-react";
 
 const Form = ({
@@ -18,8 +18,26 @@ const Form = ({
   const {
     handleSubmit,
     control,
+    reset,
+    formState: { isSubmitSuccessful },
   } = useForm();
+
   const { addTodo, updateTodo } = useTodoListContext();
+
+  useEffect(() => {
+    if (open) {
+      reset({
+        label: todo?.label || "",
+        status: todo?.status || Status.TODO,
+      });
+    }
+  }, [open, todo, reset]);
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({ label: "", status: Status.TODO });
+    }
+  }, [isSubmitSuccessful, reset]);
 
   const onSubmit = (data: FieldValues) => {
     if (todo) {
@@ -33,7 +51,16 @@ const Form = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} defaultOpen={false}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          reset({ label: "", status: Status.TODO });
+        }
+        setOpen(isOpen);
+      }}
+      defaultOpen={false}
+    >
       <DialogContent className="bg-white/10 backdrop-blur-lg text-white border-none shadow-xl rounded-2xl max-w-md mx-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-medium text-white mb-4">
@@ -93,7 +120,10 @@ const Form = ({
           <div className="flex justify-end gap-3 pt-2">
             <Button
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                reset({ label: "", status: Status.TODO });
+                setOpen(false);
+              }}
               variant="outline"
               className="border-white/10 hover:bg-white/5 text-gray-300 rounded-xl"
             >
