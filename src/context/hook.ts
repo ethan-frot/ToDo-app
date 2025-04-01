@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { TodoListContext } from "./TodoListContext.tsx";
-import { Status, Todo, TodoId } from "@/types/todo.type.ts";
-import { getTodos, saveTodos } from "@/lib/localStorage.ts";
+import { TodoListContext } from "./TodoListContext";
+import { Status, Todo, TodoId } from "@/types/todo.type";
+import { getTodos, saveTodos } from "@/lib/localStorage";
 
 const statusPriority = {
   [Status.TODO]: 1,

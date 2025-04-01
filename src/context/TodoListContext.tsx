@@ -1,13 +1,14 @@
-import { TodoListContextType } from "@/types/todoListContext.type.ts";
-import { createContext, JSX } from "react";
-import { useTodoList } from "./hook.ts";
+import { TodoListContextType } from "@/types/todoListContext.type";
+import { PropsWithChildren, createContext } from "react";
+import { useTodoList } from "./hook";
 
 const TodoListContext = createContext<TodoListContextType | null>(null);
 
-const TodoListProvider = ({ children }: { children: JSX.Element }) => {
-  const todoList = useTodoList();
+const TodoListProvider = ({ children }: PropsWithChildren) => {
+  const todoListState = useTodoList();
+
   return (
-    <TodoListContext.Provider value={todoList}>
+    <TodoListContext.Provider value={todoListState}>
       {children}
     </TodoListContext.Provider>
   );

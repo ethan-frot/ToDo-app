@@ -1,7 +1,7 @@
 import { Status, Todo, TodoId } from "@/types/todo.type";
 import { Button } from "../ui/button";
 import { CheckCircle, Edit, Trash2 } from "lucide-react";
-import { useTodoListContext } from "@/context/hook.ts";
+import { useTodoListContext } from "@/context/hook";
 import CompletedTodoLabel from "./CompletedTodoLabel";
 
 const getStatusColor = (status: Status) => {
@@ -82,6 +82,7 @@ const TodoItem = ({
           variant="ghost"
           size="icon"
           className="h-8 w-8 rounded-full hover:bg-white/10"
+          data-testid="edit-todo-button"
         >
           <Edit className="w-4 h-4 text-gray-400 hover:text-teal-400" />
         </Button>
