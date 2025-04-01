@@ -1,5 +1,5 @@
-import { Status, Todo } from "../../src/types/todo.type";
-import { sortTodosByStatus } from "../../src/context/hook";
+import { Status, Todo } from "@/types/todo.type";
+import { sortTodosByStatus } from "@/context/hook";
 
 const addTodo = (todo: Omit<Todo, "id">, setTodoList: Function) => {
   const newId = Math.random().toString(36).substring(2, 15);

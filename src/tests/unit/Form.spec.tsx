@@ -1,11 +1,10 @@
-import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import Form from "../../src/components/Form/Form";
-import { Status } from "../../src/types/todo.type";
+import { render, screen } from "@testing-library/react";
+import Form from "@/components/Form/Form";
+import { Status } from "@/types/todo.type";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("../../src/context/hook", () => ({
+jest.mock("@/context/hook", () => ({
   useTodoListContext: () => ({
     addTodo: jest.fn(),
     updateTodo: jest.fn(),
@@ -47,7 +46,7 @@ describe("Form Component", () => {
   test("devrait soumettre le formulaire avec les nouvelles valeurs", async () => {
     const mockAddTodo = jest.fn();
     jest.mock(
-      "../../src/context/hook",
+      "@/context/hook",
       () => ({
         useTodoListContext: () => ({
           addTodo: mockAddTodo,

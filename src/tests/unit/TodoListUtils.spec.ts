@@ -1,5 +1,5 @@
-import { Status, Todo } from "../../src/types/todo.type";
-import { sortTodosByStatus } from "../../src/context/hook";
+import { Status, Todo } from "@/types/todo.type";
+import { sortTodosByStatus } from "@/context/hook";
 
 describe("Todo List Utils", () => {
   describe("sortTodosByStatus", () => {

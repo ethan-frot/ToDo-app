@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import TodoList from "../../src/components/TodoList/TodoList";
-import { Status, Todo } from "../../src/types/todo.type";
+import TodoList from "@/components/TodoList/TodoList";
+import { Status, Todo } from "@/types/todo.type";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 
@@ -12,7 +12,7 @@ const mockTodoList: Todo[] = [
   { id: "4", label: "Tâche 4", status: Status.ARCHIVED },
 ];
 
-jest.mock("../../src/context/hook", () => ({
+jest.mock("@/context/hook", () => ({
   useTodoListContext: () => ({
     todoList: mockTodoList,
     addTodo: jest.fn(),
@@ -22,8 +22,15 @@ jest.mock("../../src/context/hook", () => ({
   sortTodosByStatus: jest.fn((todos) => todos),
 }));
 
-jest.mock("../../src/components/Form/Form", () => {
-  const MockForm = ({ open, setOpen }) => (
+jest.mock("@/components/Form/Form", () => {
+  const MockForm = ({
+    open,
+    setOpen,
+  }: {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    todo?: Todo;
+  }) => (
     <div data-testid="mock-form">
       {open && (
         <div>
@@ -35,8 +42,16 @@ jest.mock("../../src/components/Form/Form", () => {
   return MockForm;
 });
 
-jest.mock("../../src/components/TodoItem/TodoItem", () => {
-  const MockTodoItem = ({ item, handleUpdate, handleDelete }) => (
+jest.mock("@/components/TodoItem/TodoItem", () => {
+  const MockTodoItem = ({
+    item,
+    handleUpdate,
+    handleDelete,
+  }: {
+    item: Todo;
+    handleUpdate: (id: string) => void;
+    handleDelete: (id: string) => void;
+  }) => (
     <div data-testid={`todo-item-${item.id}`}>
       <span>{item.label}</span>
       <span>{item.status}</span>
@@ -47,8 +62,13 @@ jest.mock("../../src/components/TodoItem/TodoItem", () => {
   return MockTodoItem;
 });
 
-jest.mock("../../src/components/TodoList/TodoFilters", () => {
-  const MockTodoFilters = ({ setFilter }) => (
+jest.mock("@/components/TodoList/TodoFilters", () => {
+  const MockTodoFilters = ({
+    setFilter,
+  }: {
+    currentFilter: string | null;
+    setFilter: (filter: string | null) => void;
+  }) => (
     <div data-testid="filters">
       <button onClick={() => setFilter(null)}>Toutes</button>
       <button onClick={() => setFilter(Status.TODO)}>À faire</button>
@@ -59,10 +79,14 @@ jest.mock("../../src/components/TodoList/TodoFilters", () => {
   return MockTodoFilters;
 });
 
-jest.mock("../../src/components/TodoList/TodoProgress", () => {
-  const MockTodoProgress = ({ todos }) => {
-    const completed = todos.filter((t) => t.status === Status.DONE).length;
-    const total = todos.filter((t) => t.status !== Status.ARCHIVED).length;
+jest.mock("@/components/TodoList/TodoProgress", () => {
+  const MockTodoProgress = ({ todos }: { todos: Todo[] }) => {
+    const completed = todos.filter(
+      (t: Todo) => t.status === Status.DONE
+    ).length;
+    const total = todos.filter(
+      (t: Todo) => t.status !== Status.ARCHIVED
+    ).length;
     return (
       <div data-testid="todo-progress">
         {completed}/{total}

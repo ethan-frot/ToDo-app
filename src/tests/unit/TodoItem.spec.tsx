@@ -1,11 +1,11 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import TodoItem from "../../src/components/TodoItem/TodoItem";
-import { Status } from "../../src/types/todo.type";
+import TodoItem from "@/components/TodoItem/TodoItem";
+import { Status } from "@/types/todo.type";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("../../src/context/hook", () => ({
+jest.mock("@/context/hook", () => ({
   useTodoListContext: () => ({
     updateTodo: jest.fn(),
   }),
@@ -74,7 +74,7 @@ describe("TodoItem Component", () => {
 
   test("devrait basculer le statut lorsqu'on clique sur la case à cocher", async () => {
     const mockUpdateTodo = jest.fn();
-    jest.mock("../../src/context/hook", () => ({
+    jest.mock("@/context/hook", () => ({
       useTodoListContext: () => ({
         updateTodo: mockUpdateTodo,
       }),

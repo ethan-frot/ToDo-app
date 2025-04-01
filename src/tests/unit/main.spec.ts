@@ -1,4 +1,4 @@
-import { Todo, Status } from "../../src/types/todo.type";
+import { Todo, Status } from "@/types/todo.type";
 
 describe("Status Enum", () => {
   test("should have the correct values", () => {
