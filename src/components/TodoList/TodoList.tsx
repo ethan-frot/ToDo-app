@@ -1,12 +1,12 @@
 import { Todo } from "@/types/todo.type";
-import TodoItem from "../TodoItem";
+import TodoItem from "../TodoItem/TodoItem";
 import { useEffect, useState } from "react";
-import Form from "../Form";
+import Form from "../Form/Form";
 import { Button } from "../ui/button";
 import { Plus, Search } from "lucide-react";
 import TodoFilters from "./TodoFilters";
 import TodoProgress from "./TodoProgress";
-import { sortTodosByStatus } from "@/context/hook.ts";
+import { sortTodosByStatus } from "@/context/hook";
 
 const TodoList = ({ list }: { list: Todo[] }) => {
   const [todos, setTodos] = useState<Todo[]>(list);

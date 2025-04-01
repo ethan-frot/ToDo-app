@@ -1,5 +1,5 @@
-import TodoList from "./components/TodoList";
-import { useTodoListContext } from "./context/hook.ts";
+import TodoList from "./components/TodoList/TodoList";
+import { useTodoListContext } from "./context/hook";
 import { UserCircle2 } from "lucide-react";
 
 const App = () => {
