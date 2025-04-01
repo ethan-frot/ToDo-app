@@ -3,7 +3,7 @@ import React from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { useTodoListContext } from "@/context/TodoListContext/hook";
+import { useTodoListContext } from "@/context/hook.ts";
 import { Check, X } from "lucide-react";
 
 const Form = ({
@@ -18,18 +18,15 @@ const Form = ({
   const {
     handleSubmit,
     control,
-    formState: { errors },
   } = useForm();
   const { addTodo, updateTodo } = useTodoListContext();
 
   const onSubmit = (data: FieldValues) => {
     if (todo) {
-      // Update existing todo
       updateTodo(todo.id, {
         ...data,
       });
     } else {
-      // Add new todo
       addTodo(data as Omit<Todo, "id">);
     }
     setOpen(false);

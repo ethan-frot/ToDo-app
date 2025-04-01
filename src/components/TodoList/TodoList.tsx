@@ -1,4 +1,4 @@
-import { Status, Todo } from "@/types/todo.type";
+import { Todo } from "@/types/todo.type";
 import TodoItem from "../TodoItem";
 import { useEffect, useState } from "react";
 import Form from "../Form";
@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { Plus, Search } from "lucide-react";
 import TodoFilters from "./TodoFilters";
 import TodoProgress from "./TodoProgress";
-import { sortTodosByStatus } from "@/context/TodoListContext/hook";
+import { sortTodosByStatus } from "@/context/hook.ts";
 
 const TodoList = ({ list }: { list: Todo[] }) => {
   const [todos, setTodos] = useState<Todo[]>(list);
@@ -36,12 +36,10 @@ const TodoList = ({ list }: { list: Todo[] }) => {
     }
   }, [open]);
 
-  // Mise à jour de la liste des todos lorsque list change
   useEffect(() => {
     setTodos(sortTodosByStatus(list));
   }, [list]);
 
-  // Filtre les todos en fonction du statut et du terme de recherche
   const filteredTodos = todos.filter((todo) => {
     const matchesStatus = statusFilter ? todo.status === statusFilter : true;
     const matchesSearch = todo.label
@@ -52,7 +50,6 @@ const TodoList = ({ list }: { list: Todo[] }) => {
 
   return (
     <div className="w-full flex flex-col gap-6">
-      {/* Barre de recherche et bouton d'ajout */}
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -77,16 +74,12 @@ const TodoList = ({ list }: { list: Todo[] }) => {
         </Button>
       </div>
 
-      {/* Filtres par statut */}
       <TodoFilters currentFilter={statusFilter} setFilter={setStatusFilter} />
 
-      {/* Affichage de la progression si des tâches existent */}
       {todos.length > 0 && <TodoProgress todos={todos} />}
 
-      {/* Formulaire d'ajout/modification de tâche */}
       <Form open={open} setOpen={setOpen} todo={selectedTodo} />
 
-      {/* Liste des tâches */}
       <div className="space-y-2 mt-2">
         {filteredTodos.length > 0 ? (
           filteredTodos.map((item) => (

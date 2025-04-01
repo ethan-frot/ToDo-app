@@ -1,7 +1,7 @@
 import { Status, Todo, TodoId } from "@/types/todo.type";
 import { Button } from "../ui/button";
 import { CheckCircle, Edit, Trash2 } from "lucide-react";
-import { useTodoListContext } from "@/context/TodoListContext/hook";
+import { useTodoListContext } from "@/context/hook.ts";
 import CompletedTodoLabel from "./CompletedTodoLabel";
 
 const getStatusColor = (status: Status) => {

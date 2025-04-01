@@ -6,7 +6,6 @@ type FilterOption = {
   label: string;
 };
 
-// Options de filtrage incluant "Toutes" et tous les statuts
 const filterOptions: FilterOption[] = [
   { value: null, label: "Toutes" },
   ...Object.values(Status).map((status) => ({ value: status, label: status })),

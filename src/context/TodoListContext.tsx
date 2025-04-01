@@ -1,6 +1,6 @@
-import { TodoListContextType } from "@/types/todoListContext.type";
+import { TodoListContextType } from "@/types/todoListContext.type.ts";
 import { createContext, JSX } from "react";
-import { useTodoList } from "./hook";
+import { useTodoList } from "./hook.ts";
 
 const TodoListContext = createContext<TodoListContextType | null>(null);
 

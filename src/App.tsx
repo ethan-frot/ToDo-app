@@ -1,11 +1,10 @@
 import TodoList from "./components/TodoList";
-import { useTodoListContext } from "./context/TodoListContext/hook";
+import { useTodoListContext } from "./context/hook.ts";
 import { UserCircle2 } from "lucide-react";
 
 const App = () => {
   const { todoList } = useTodoListContext();
 
-  // Obtenir la date actuelle
   const today = new Date();
   const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
