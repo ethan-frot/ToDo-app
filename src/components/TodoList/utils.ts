@@ -1,3 +1,3 @@
-const FIELDS = ["Label", "Statut"];
+const FIELDS = ["Description", "Statut", "Actions"];
 
 export { FIELDS };
