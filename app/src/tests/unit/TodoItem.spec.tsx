@@ -3,11 +3,10 @@ import TodoItem from "@/components/TodoItem/TodoItem";
 import { Status } from "@/types/todo.type";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
+import { mockTodoListContext } from "../mocks/TodoListContext";
 
 jest.mock("@/context/hook", () => ({
-  useTodoListContext: () => ({
-    updateTodo: jest.fn(),
-  }),
+  useTodoListContext: () => mockTodoListContext,
 }));
 
 const mockHandleUpdate = jest.fn();
@@ -20,7 +19,7 @@ describe("TodoItem Component", () => {
 
   const renderTodoItem = (status = Status.TODO) => {
     const todo = {
-      id: "123",
+      id: "1",
       label: "Tâche de test",
       status,
     };
@@ -64,7 +63,7 @@ describe("TodoItem Component", () => {
     await user.click(screen.getByTestId("edit-todo-button"));
 
     expect(mockHandleUpdate).toHaveBeenCalledTimes(1);
-    expect(mockHandleUpdate).toHaveBeenCalledWith("123");
+    expect(mockHandleUpdate).toHaveBeenCalledWith("1");
   });
 
   test("devrait appeler handleDelete lorsque le bouton supprimer est cliqué", async () => {
@@ -74,21 +73,16 @@ describe("TodoItem Component", () => {
     await user.click(screen.getByTestId("remove-todo-button"));
 
     expect(mockHandleDelete).toHaveBeenCalledTimes(1);
-    expect(mockHandleDelete).toHaveBeenCalledWith("123");
+    expect(mockHandleDelete).toHaveBeenCalledWith("1");
   });
 
   test("devrait basculer le statut lorsqu'on clique sur la case à cocher", async () => {
-    const mockUpdateTodo = jest.fn();
-    jest.mock("@/context/hook", () => ({
-      useTodoListContext: () => ({
-        updateTodo: mockUpdateTodo,
-      }),
-    }));
-
     const user = userEvent.setup();
     renderTodoItem(Status.TODO);
 
     const checkbox = screen.getByTestId("todo-checkbox");
     await user.click(checkbox);
+
+    expect(mockTodoListContext.updateTodo).toHaveBeenCalled();
   });
 });

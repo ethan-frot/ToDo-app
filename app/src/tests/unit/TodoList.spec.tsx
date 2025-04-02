@@ -4,21 +4,10 @@ import TodoList from "@/components/TodoList/TodoList";
 import { Status, Todo } from "@/types/todo.type";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-
-const mockTodoList: Todo[] = [
-  { id: "1", label: "Tâche 1", status: Status.TODO },
-  { id: "2", label: "Tâche 2", status: Status.IN_PROGRESS },
-  { id: "3", label: "Tâche 3", status: Status.DONE },
-  { id: "4", label: "Tâche 4", status: Status.ARCHIVED },
-];
+import { mockTodoListContext, mockTodos } from "../mocks/TodoListContext";
 
 jest.mock("@/context/hook", () => ({
-  useTodoListContext: () => ({
-    todoList: mockTodoList,
-    addTodo: jest.fn(),
-    removeTodo: jest.fn(),
-    updateTodo: jest.fn(),
-  }),
+  useTodoListContext: () => mockTodoListContext,
   sortTodosByStatus: jest.fn((todos) => todos),
 }));
 
@@ -109,7 +98,7 @@ jest.mock("@/components/TodoList/TodoProgress", () => {
 
 describe("TodoList Component", () => {
   test("devrait afficher toutes les tâches par défaut", () => {
-    render(<TodoList list={mockTodoList} />);
+    render(<TodoList list={mockTodos} />);
 
     expect(screen.getByTestId("todo-item-1")).toBeInTheDocument();
     expect(screen.getByTestId("todo-item-2")).toBeInTheDocument();
@@ -119,7 +108,7 @@ describe("TodoList Component", () => {
 
   test("devrait filtrer les tâches selon le statut sélectionné", async () => {
     const user = userEvent.setup();
-    render(<TodoList list={mockTodoList} />);
+    render(<TodoList list={mockTodos} />);
 
     // Simuler un clic sur le bouton "À faire"
     await user.click(screen.getByTestId("filter-TODO"));
@@ -127,7 +116,7 @@ describe("TodoList Component", () => {
 
   test("devrait filtrer les tâches avec la recherche", async () => {
     const user = userEvent.setup();
-    render(<TodoList list={mockTodoList} />);
+    render(<TodoList list={mockTodos} />);
 
     const searchInput = screen.getByTestId("search-todo-input");
     await user.type(searchInput, "Tâche 1");
@@ -135,7 +124,7 @@ describe("TodoList Component", () => {
 
   test("devrait ouvrir le formulaire quand le bouton ajouter est cliqué", async () => {
     const user = userEvent.setup();
-    render(<TodoList list={mockTodoList} />);
+    render(<TodoList list={mockTodos} />);
 
     await user.click(screen.getByTestId("new-todo-button"));
 
@@ -143,7 +132,7 @@ describe("TodoList Component", () => {
   });
 
   test("devrait afficher la progression des tâches", () => {
-    render(<TodoList list={mockTodoList} />);
+    render(<TodoList list={mockTodos} />);
 
     expect(screen.getByTestId("todo-progress-container")).toBeInTheDocument();
   });

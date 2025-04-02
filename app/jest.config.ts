@@ -126,12 +126,10 @@ const config: Config = {
     // restoreMocks: false,
 
     // The root directory that Jest should scan for tests and modules within
-    // rootDir: undefined,
+    rootDir: ".",
 
     // A list of paths to directories that Jest should use to search for files in
-    // roots: [
-    //   "<rootDir>"
-    // ],
+    roots: ["<rootDir>/src"],
 
     // Allows you to use a custom runner instead of Jest's default test runner
     // runner: "jest-runner",
@@ -140,7 +138,7 @@ const config: Config = {
     // setupFiles: [],
 
     // A list of paths to modules that run some code to configure or set up the testing framework before each test
-    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+    setupFilesAfterEnv: ["<rootDir>/src/tests/setup.ts"],
 
     // The number of seconds after which a test is considered as slow and reported as such in the results.
     // slowTestThreshold: 5,
@@ -158,19 +156,16 @@ const config: Config = {
     // testLocationInResults: false,
 
     // The glob patterns Jest uses to detect test files
-    testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
-
-    // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-    testPathIgnorePatterns: [
-        "/node_modules/",
-        "/dist/",
-        "/.next/",
-        "/src/tests/e2e/",
-        "/tests-examples/",
+    testMatch: [
+        "<rootDir>/src/tests/unit/**/*.spec.[jt]s?(x)",
+        "<rootDir>/src/tests/unit/**/*.test.[jt]s?(x)",
     ],
 
     // The regexp pattern or array of patterns that Jest uses to detect test files
-    // testRegex: [],
+    testRegex: undefined,
+
+    // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
+    testPathIgnorePatterns: ["/node_modules/", "/dist/"],
 
     // This option allows the use of a custom results processor
     // testResultsProcessor: undefined,
@@ -193,7 +188,7 @@ const config: Config = {
     // unmockedModulePathPatterns: undefined,
 
     // Indicates whether each individual test should be reported during the run
-    // verbose: undefined,
+    verbose: true,
 
     // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
     // watchPathIgnorePatterns: [],

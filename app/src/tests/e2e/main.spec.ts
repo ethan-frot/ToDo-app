@@ -3,7 +3,6 @@ import { expect, test } from "@playwright/test";
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => {
-    localStorage.clear();
     sessionStorage.clear();
     document.cookie.split(";").forEach((cookie) => {
       const [name] = cookie.trim().split("=");

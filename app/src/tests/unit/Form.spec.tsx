@@ -3,19 +3,18 @@ import Form from "@/components/Form/Form";
 import { Status } from "@/types/todo.type";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
+import { mockTodoListContext, resetMocks } from "../mocks/TodoListContext";
 
 jest.mock("@/context/hook", () => ({
-  useTodoListContext: () => ({
-    addTodo: jest.fn(),
-    updateTodo: jest.fn(),
-  }),
+  useTodoListContext: () => mockTodoListContext,
 }));
 
 const mockSetOpen = jest.fn();
 
 describe("Form Component", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    resetMocks();
+    mockSetOpen.mockClear();
   });
 
   test("devrait rendre le formulaire de création correctement", () => {
@@ -42,25 +41,13 @@ describe("Form Component", () => {
   });
 
   test("devrait soumettre le formulaire avec les nouvelles valeurs", async () => {
-    const mockAddTodo = jest.fn();
-    jest.mock(
-      "@/context/hook",
-      () => ({
-        useTodoListContext: () => ({
-          addTodo: mockAddTodo,
-          updateTodo: jest.fn(),
-        }),
-      }),
-      { virtual: true }
-    );
-
     const user = userEvent.setup();
 
     render(<Form open={true} setOpen={mockSetOpen} />);
     await user.type(screen.getByTestId("new-todo-input"), "Nouvelle tâche");
-
     await user.click(screen.getByTestId("submit-new-todo-button"));
 
+    expect(mockTodoListContext.addTodo).toHaveBeenCalled();
     expect(mockSetOpen).toHaveBeenCalledWith(false);
   });
 

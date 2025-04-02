@@ -1,59 +1,6 @@
 import { Status, Todo } from "@/types/todo.type";
 import { sortTodosByStatus } from "@/context/hook";
 
-const addTodo = (todo: Omit<Todo, "id">, setTodoList: Function) => {
-  const newId = Math.random().toString(36).substring(2, 15);
-  const newTodo = { ...todo, id: newId };
-  setTodoList((prev: Todo[]) => {
-    const newList = [...prev, newTodo];
-    return sortTodosByStatus(newList);
-  });
-};
-
-const removeTodo = (id: string, setTodoList: Function) => {
-  setTodoList((prev: Todo[]) => {
-    const newList = prev.filter((todo) => todo.id !== id);
-    return sortTodosByStatus(newList);
-  });
-};
-
-const updateTodo = ({
-  id,
-  updatedTodo,
-  setTodoList,
-}: {
-  id: string;
-  updatedTodo: Partial<Todo>;
-  setTodoList: Function;
-}) => {
-  setTodoList((prev: Todo[]) => {
-    const newList = prev.map((todo) =>
-      todo.id === id ? { ...todo, ...updatedTodo } : todo
-    );
-    return sortTodosByStatus(newList);
-  });
-};
-
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: jest.fn((key: string) => store[key] || null),
-    setItem: jest.fn((key: string, value: string) => {
-      store[key] = value.toString();
-    }),
-    clear: jest.fn(() => {
-      store = {};
-    }),
-    removeItem: jest.fn((key: string) => {
-      delete store[key];
-    }),
-  };
-})();
-
-Object.defineProperty(window, "localStorage", {
-  value: localStorageMock,
-});
-
 describe("TodoListContext - Fonctions utilitaires", () => {
   describe("sortTodosByStatus", () => {
     test("devrait trier les tâches par statut dans l'ordre correct", () => {
@@ -109,8 +56,17 @@ describe("TodoListContext - Fonctions utilitaires", () => {
       ];
     });
 
-    test("addTodo - devrait ajouter une nouvelle tâche", () => {
+    test("addTodo - devrait ajouter une nouvelle tâche et trier le résultat", () => {
       const newTodo = { label: "Nouvelle tâche", status: Status.TODO };
+      const addTodo = (todo: Omit<Todo, "id">, setTodoList: Function) => {
+        const newId = Math.random().toString(36).substring(2, 15);
+        const newTodoWithId = { ...todo, id: newId };
+        setTodoList((prev: Todo[]) => {
+          const newList = [...prev, newTodoWithId];
+          return sortTodosByStatus(newList);
+        });
+      };
+
       addTodo(newTodo, mockSetTodoList);
 
       expect(mockSetTodoList).toHaveBeenCalled();
@@ -119,15 +75,20 @@ describe("TodoListContext - Fonctions utilitaires", () => {
       const result = updateFunction(mockTodos);
 
       expect(result.length).toBe(mockTodos.length + 1);
-
-      const addedTodo = result.find((todo) => todo.label === newTodo.label);
+      const addedTodo = result.find((t: Todo) => t.label === newTodo.label);
       expect(addedTodo).toBeDefined();
-      expect(addedTodo?.label).toBe(newTodo.label);
       expect(addedTodo?.status).toBe(newTodo.status);
     });
 
     test("removeTodo - devrait supprimer une tâche existante", () => {
       const idToRemove = "1";
+      const removeTodo = (id: string, setTodoList: Function) => {
+        setTodoList((prev: Todo[]) => {
+          const newList = prev.filter((todo: Todo) => todo.id !== id);
+          return sortTodosByStatus(newList);
+        });
+      };
+
       removeTodo(idToRemove, mockSetTodoList);
 
       expect(mockSetTodoList).toHaveBeenCalled();
@@ -136,25 +97,36 @@ describe("TodoListContext - Fonctions utilitaires", () => {
       const result = updateFunction(mockTodos);
 
       expect(result.length).toBe(mockTodos.length - 1);
-      expect(result.find((todo) => todo.id === idToRemove)).toBeUndefined();
+      expect(
+        result.find((todo: Todo) => todo.id === idToRemove)
+      ).toBeUndefined();
     });
 
     test("updateTodo - devrait mettre à jour une tâche existante", () => {
       const idToUpdate = "1";
       const updates = { label: "Tâche mise à jour", status: Status.DONE };
 
-      updateTodo({
-        id: idToUpdate,
-        updatedTodo: updates,
-        setTodoList: mockSetTodoList,
-      });
+      const updateTodo = (
+        id: string,
+        updatedTodo: Partial<Todo>,
+        setTodoList: Function
+      ) => {
+        setTodoList((prev: Todo[]) => {
+          const newList = prev.map((todo: Todo) =>
+            todo.id === id ? { ...todo, ...updatedTodo } : todo
+          );
+          return sortTodosByStatus(newList);
+        });
+      };
+
+      updateTodo(idToUpdate, updates, mockSetTodoList);
 
       expect(mockSetTodoList).toHaveBeenCalled();
 
       const updateFunction = mockSetTodoList.mock.calls[0][0];
       const result = updateFunction(mockTodos);
 
-      const updatedTodo = result.find((todo) => todo.id === idToUpdate);
+      const updatedTodo = result.find((todo: Todo) => todo.id === idToUpdate);
       expect(updatedTodo).toBeDefined();
       expect(updatedTodo?.label).toBe(updates.label);
       expect(updatedTodo?.status).toBe(updates.status);
