@@ -1,0 +1,61 @@
+name: CI
+on: push
+jobs:
+  test-frontend:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install frontend dependencies
+        run: cd app && npm install
+      - name: Run frontend unit tests
+        run: cd app && npm run test:unit
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: cd app && echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').dependencies['@playwright/test'].version)")" >> $GITHUB_ENV
+      - name: Cache playwright binaries
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install Playwright browsers
+        run: cd app && npx playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Run Playwright tests
+        run: cd app && npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: app/playwright-report/
+          retention-days: 30
+
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install backend dependencies
+        run: cd api && npm install
+      - name: Run backend tests
+        run: cd api && npm run test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [test-frontend, test-backend]
+    steps:
+      - name: Build frontend
+        run: echo "Building frontend..." && exit 0
+      - name: Build backend
+        run: echo "Building backend..." && exit 0

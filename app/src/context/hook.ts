@@ -1,7 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { TodoListContext } from "./TodoListContext";
 import { Status, Todo, TodoId } from "@/types/todo.type";
-import { getTodos, saveTodos } from "@/lib/localStorage";
+import {
+  fetchTodos,
+  createTodo,
+  updateTodo,
+  deleteTodo,
+} from "@/lib/apiService";
 
 const statusPriority = {
   [Status.TODO]: 1,
@@ -39,80 +44,81 @@ const useTodoListContext = () => {
 };
 
 const useTodoList = () => {
-  const [todoList, setTodoList] = useState<Todo[]>(() => {
-    try {
-      const savedTodos = getTodos();
-
-      if (!savedTodos || savedTodos.length === 0) {
-        const defaultTodos = [
-          {
-            id: "1",
-            label: "Créer une liste de tâches",
-            status: Status.DONE,
-          },
-          {
-            id: "2",
-            label: "Ajouter des fonctionnalités",
-            status: Status.IN_PROGRESS,
-          },
-          {
-            id: "3",
-            label: "Améliorer l'interface utilisateur",
-            status: Status.TODO,
-          },
-        ];
-        return sortTodosByStatus(defaultTodos);
-      }
-
-      return sortTodosByStatus(savedTodos);
-    } catch (error) {
-      console.error("Erreur lors de l'initialisation des tâches:", error);
-      return [];
-    }
-  });
+  const [todoList, setTodoList] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      saveTodos(todoList);
-    } catch (error) {
-      console.error("Erreur lors de la sauvegarde des tâches:", error);
-    }
-  }, [todoList]);
+    const loadTodos = async () => {
+      try {
+        setIsLoading(true);
+        const todos = await fetchTodos();
+        setTodoList(sortTodosByStatus(todos));
+        setError(null);
+      } catch (err) {
+        console.error("Erreur lors du chargement des tâches:", err);
+        setError("Impossible de charger les tâches");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const addTodoHandler = (todo: Omit<Todo, "id">) => {
+    loadTodos();
+  }, []);
+
+  const addTodoHandler = async (todo: Omit<Todo, "id">) => {
     try {
-      const newId = Math.random().toString(36).substring(2, 15);
-      const newTodo = { ...todo, id: newId as TodoId };
-      setTodoList((prev) => {
-        const newList = [...prev, newTodo];
-        return sortTodosByStatus(newList);
-      });
+      setIsLoading(true);
+      const newTodo = await createTodo(todo);
+      if (newTodo) {
+        setTodoList((prev) => {
+          const newList = [...prev, newTodo];
+          return sortTodosByStatus(newList);
+        });
+      }
     } catch (error) {
       console.error("Erreur lors de l'ajout d'une tâche:", error);
+      setError("Impossible d'ajouter la tâche");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const removeTodoHandler = (id: TodoId) => {
+  const removeTodoHandler = async (id: TodoId) => {
     try {
-      setTodoList((prev) => {
-        const newList = prev.filter((todo) => todo.id !== id);
-        return sortTodosByStatus(newList);
-      });
+      setIsLoading(true);
+      const success = await deleteTodo(id);
+      if (success) {
+        setTodoList((prev) => {
+          const newList = prev.filter((todo) => todo.id !== id);
+          return sortTodosByStatus(newList);
+        });
+      }
     } catch (error) {
       console.error("Erreur lors de la suppression d'une tâche:", error);
+      setError("Impossible de supprimer la tâche");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const updateTodoHandler = (id: TodoId, updatedTodo: Partial<Todo>) => {
+  const updateTodoHandler = async (id: TodoId, updates: Partial<Todo>) => {
     try {
-      setTodoList((prev) => {
-        const newList = prev.map((todo) =>
-          todo.id === id ? { ...todo, ...updatedTodo } : todo
-        );
-        return sortTodosByStatus(newList);
-      });
+      setIsLoading(true);
+      const updatedTodo = await updateTodo(id, updates);
+      if (updatedTodo) {
+        setTodoList((prev) => {
+          const newList = prev.map((todo) =>
+            todo.id === id ? { ...updatedTodo } : todo
+          );
+          return sortTodosByStatus(newList);
+        });
+      }
     } catch (error) {
       console.error("Erreur lors de la mise à jour d'une tâche:", error);
+      setError("Impossible de mettre à jour la tâche");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -122,6 +128,8 @@ const useTodoList = () => {
     addTodo: addTodoHandler,
     removeTodo: removeTodoHandler,
     updateTodo: updateTodoHandler,
+    isLoading,
+    error,
   };
 };
 
