@@ -16,8 +16,8 @@ model Todo {
 }
 
 enum Status {
-  TODO
-  IN_PROGRESS
-  DONE
-  ARCHIVED
+  TODO       @map("À FAIRE")
+  IN_PROGRESS @map("EN COURS")
+  DONE       @map("FAIT")
+  ARCHIVED   @map("ARCHIVÉ")
 }

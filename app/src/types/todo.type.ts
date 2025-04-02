@@ -1,8 +1,8 @@
 export enum Status {
-  TODO = "TODO",
-  IN_PROGRESS = "IN_PROGRESS",
-  DONE = "DONE",
-  ARCHIVED = "ARCHIVED",
+  TODO = "À FAIRE",
+  IN_PROGRESS = "EN COURS",
+  DONE = "FAIT",
+  ARCHIVED = "ARCHIVÉ",
 }
 
 export type TodoId = string & { __type?: "TodoId" };
