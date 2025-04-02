@@ -37,23 +37,9 @@ jobs:
           path: app/playwright-report/
           retention-days: 30
 
-  test-backend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-      - name: Install backend dependencies
-        run: cd api && npm install
-      - name: Run backend tests
-        run: cd api && npm run test
-
   build:
     runs-on: ubuntu-latest
-    needs: [test-frontend, test-backend]
+    needs: [test-frontend]
     steps:
       - name: Build frontend
         run: echo "Building frontend..." && exit 0

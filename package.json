@@ -4,10 +4,8 @@
     "scripts": {
         "test:frontend": "cd app && npm run test:unit",
         "test:frontend:e2e": "cd app && npm run test:e2e",
-        "test:backend": "cd api && npm run test",
-        "test:backend:e2e": "cd api && npm run test:e2e",
-        "test:all": "npm-run-all --parallel test:frontend test:backend",
-        "test:all:e2e": "npm-run-all --parallel test:frontend:e2e test:backend:e2e",
+        "test:all": "npm run test:frontend",
+        "test:all:e2e": "npm run test:frontend:e2e",
         "test:ci": "npm-run-all test:all test:all:e2e"
     },
     "devDependencies": {

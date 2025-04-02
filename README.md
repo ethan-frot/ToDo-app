@@ -27,14 +27,14 @@ Une application moderne de gestion de tâches, construite avec React en frontend
 
 - **NestJS** - Framework Node.js
 - **TypeScript** - Typage statique
-- **Jest** - Tests unitaires et e2e
+- **PostgreSQL** - Base de données relationnelle
+- **Docker** - Conteneurisation
 
 ### Tests
 
-- **Jest** - Tests unitaires
+- **Jest** - Tests unitaires frontend
 - **Playwright** - Tests end-to-end
 - **React Testing Library** - Tests de composants
-- **Supertest** - Tests d'API
 
 ## 🚦 Démarrage rapide
 
@@ -42,6 +42,7 @@ Une application moderne de gestion de tâches, construite avec React en frontend
 
 - Node.js (v18+)
 - npm ou yarn
+- Docker et Docker Compose (pour le backend)
 
 ### Structure du projet
 
@@ -57,7 +58,16 @@ cd app
 npm install
 ```
 
-2. Installer les dépendances du backend :
+2. Installation du backend avec Docker :
+
+```bash
+cd ../api
+docker-compose up -d
+```
+
+Cela lancera un conteneur PostgreSQL et Adminer pour la gestion de la base de données. Adminer sera accessible à l'adresse [http://localhost:8080](http://localhost:8080).
+
+3. Installation des dépendances du backend :
 
 ```bash
 cd ../api
@@ -89,15 +99,6 @@ npm run dev
 L'application frontend sera accessible à l'adresse [http://localhost:5173](http://localhost:5173).
 
 ## 🧪 Tests
-
-### Tests du backend
-
-```bash
-cd api
-npm run test          # Exécuter les tests unitaires
-npm run test:cov      # Exécuter les tests avec couverture
-npm run test:e2e      # Exécuter les tests end-to-end
-```
 
 ### Tests du frontend
 
