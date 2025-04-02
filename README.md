@@ -50,21 +50,14 @@ Une application moderne de gestion de tâches, construite avec React en frontend
 
 ### Installation
 
-1. Cloner le dépôt :
-
-```bash
-git clone <repo-url>
-cd Todo-app
-```
-
-2. Installer les dépendances du frontend :
+1. Installer les dépendances du frontend :
 
 ```bash
 cd app
 npm install
 ```
 
-3. Installer les dépendances du backend :
+2. Installer les dépendances du backend :
 
 ```bash
 cd ../api
